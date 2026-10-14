@@ -1,0 +1,917 @@
+/* ─────────────────────────────────────────────
+   Salt Page Exact Figma Layout Styles
+───────────────────────────────────────────── */
+
+:root {
+  --sp-primary: #7c3aed;
+  --sp-primary-dark: #6d28d9;
+  --sp-primary-light: #f3e8ff;
+  --sp-text-main: #0f172a;
+  --sp-text-body: #334155;
+  --sp-text-muted: #64748b;
+  --sp-text-subtle: #94a3b8;
+  --sp-bg-page: #ffffff;
+  --sp-bg-card: #ffffff;
+  --sp-bg-sidebar-toc: #f8fafc;
+  --sp-border: #f1f5f9;
+  --sp-border-input: #e2e8f0;
+  --sp-green: #16a34a;
+}
+
+.sp-page-container {
+  background-color: var(--sp-bg-page);
+  min-height: 100vh;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--sp-text-main);
+}
+
+.sp-content-wrapper {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 24px 20px 80px;
+}
+
+/* ── Top Title Block ── */
+.sp-title-header {
+  margin-bottom: 24px;
+}
+
+.sp-main-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--sp-text-main);
+  margin: 0;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+/* ── 3-Column Grid Layout ── */
+.sp-grid-layout {
+  display: grid;
+  grid-template-columns: 200px 1fr 340px;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .sp-grid-layout {
+    grid-template-columns: 180px 1fr 310px;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 900px) {
+  .sp-grid-layout {
+    grid-template-columns: 1fr 320px;
+  }
+  .sp-toc-column {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .sp-grid-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* ── Left Column: Table of Contents Card (Sticky) ── */
+.sp-toc-column {
+  position: sticky;
+  top: 90px;
+}
+
+.sp-toc-card {
+  background-color: var(--sp-bg-sidebar-toc);
+  border: 1px solid var(--sp-border);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+
+.sp-toc-header {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sp-text-subtle);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.sp-toc-salt-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--sp-text-main);
+  margin-bottom: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.sp-toc-salt-name:hover,
+.sp-toc-salt-name.active {
+  color: var(--sp-primary);
+}
+
+.sp-toc-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sp-toc-link {
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+  text-decoration: none;
+  transition: color 0.15s ease, font-weight 0.15s ease;
+  cursor: pointer;
+  display: block;
+}
+
+.sp-toc-link:hover {
+  color: var(--sp-primary);
+}
+
+.sp-toc-link.active {
+  color: var(--sp-primary);
+  font-weight: 700;
+}
+
+/* ── Mobile TOC Navigation Chips ── */
+.sp-mobile-toc {
+  display: none;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.sp-mobile-toc::-webkit-scrollbar { display: none; }
+
+@media (max-width: 900px) {
+  .sp-mobile-toc {
+    display: flex;
+    gap: 8px;
+  }
+}
+
+.sp-mobile-toc-chip {
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: var(--sp-bg-sidebar-toc);
+  border: 1px solid var(--sp-border-input);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--sp-text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.sp-mobile-toc-chip.active {
+  background: var(--sp-primary);
+  color: #ffffff;
+  border-color: var(--sp-primary);
+}
+
+/* ── Middle Column: Main Content Sections ── */
+.sp-main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.sp-section-block {
+  scroll-margin-top: 100px;
+}
+
+.sp-section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--sp-text-main);
+  margin: 0 0 14px 0;
+  line-height: 1.3;
+}
+
+.sp-section-body {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--sp-text-body);
+}
+
+.sp-section-body p {
+  margin-top: 0;
+  margin-bottom: 14px;
+}
+
+.sp-section-body ul {
+  padding-left: 20px;
+  margin-bottom: 16px;
+}
+
+.sp-section-body li {
+  margin-bottom: 8px;
+}
+
+.sp-section-body strong {
+  color: var(--sp-text-main);
+}
+
+/* Figma exact content formatting styles */
+.sp-figma-subtitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin: 20px 0 8px 0;
+  line-height: 1.35;
+}
+
+.sp-figma-bullet-list {
+  list-style-type: disc !important;
+  padding-left: 20px !important;
+  margin: 12px 0 18px 0 !important;
+}
+
+.sp-figma-bullet-list li {
+  margin-bottom: 10px !important;
+  color: #374151;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+.sp-figma-bullet-list li strong {
+  color: #111827;
+  font-weight: 700;
+}
+
+.sp-figma-bullet-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 28px;
+  list-style-type: disc !important;
+  padding-left: 20px !important;
+  margin: 14px 0 20px 0 !important;
+}
+
+@media (max-width: 600px) {
+  .sp-figma-bullet-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+.sp-figma-bullet-grid li {
+  color: #374151;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.sp-warning-box {
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 18px;
+  color: #991b1b;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.sp-warning-icon {
+  font-size: 16px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* View all link */
+.sp-view-all-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--sp-primary);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: color 0.15s ease;
+}
+
+.sp-view-all-link:hover {
+  color: var(--sp-primary-dark);
+  text-decoration: underline;
+}
+
+/* Plain FAQ list matching Figma Image 2 */
+.sp-faq-plain-container {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.sp-faq-plain-item {
+  scroll-margin-top: 120px;
+}
+
+.sp-faq-plain-question {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 6px 0;
+  line-height: 1.4;
+}
+
+.sp-faq-plain-answer {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: #334155;
+  margin: 0;
+}
+
+/* TOC Sub-links for FAQ questions (Figma Image 2) */
+.sp-toc-subnav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 12px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.sp-toc-sublink {
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+  text-decoration: none;
+  cursor: pointer;
+  line-height: 1.35;
+  transition: color 0.15s ease;
+  display: block;
+}
+
+.sp-toc-sublink:hover {
+  color: var(--sp-primary);
+}
+
+.sp-toc-sublink.active {
+  color: var(--sp-primary);
+  font-weight: 700;
+}
+
+/* Medical Reviewer Card */
+.sp-reviewer-card {
+  background-color: #ffffff;
+  border: 1px solid var(--sp-border);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.sp-reviewer-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--sp-primary);
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sp-reviewer-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.sp-reviewer-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sp-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
+}
+
+.sp-reviewer-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--sp-text-main);
+  margin-bottom: 2px;
+}
+
+.sp-reviewer-meta {
+  font-size: 12.5px;
+  color: var(--sp-text-muted);
+  margin-bottom: 4px;
+}
+
+.sp-reviewer-date {
+  font-size: 11.5px;
+  color: var(--sp-text-subtle);
+}
+
+/* Related Compositions Widget */
+.sp-related-card {
+  background-color: #ffffff;
+  border: 1px solid var(--sp-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.sp-related-header {
+  padding: 16px 20px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sp-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--sp-border);
+  background: var(--sp-bg-sidebar-toc);
+}
+
+.sp-related-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.sp-related-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--sp-border);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.sp-related-item:last-child {
+  border-bottom: none;
+}
+
+.sp-related-item:hover {
+  background-color: rgba(124, 58, 237, 0.03);
+}
+
+.sp-related-title-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.sp-related-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--sp-primary);
+}
+
+.sp-related-code {
+  font-size: 11px;
+  color: var(--sp-text-subtle);
+  margin-top: 2px;
+}
+
+.sp-related-count-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--sp-text-muted);
+}
+
+/* ── Main Content Area: Related Compositions Card (Figma Image 4) ── */
+.sp-main-related-card {
+  background-color: #ffffff;
+  border: 1px solid var(--sp-border-input);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.sp-main-related-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--sp-border);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.sp-main-related-item:last-child {
+  border-bottom: none;
+}
+
+.sp-main-related-item:hover {
+  background-color: #f8fafc;
+}
+
+.sp-main-related-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sp-main-related-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--sp-primary);
+}
+
+.sp-main-related-code {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.sp-main-related-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--sp-text-muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ── References Numbered List ── */
+.sp-references-list {
+  padding-left: 20px;
+  margin: 10px 0 16px 0;
+  color: var(--sp-text-body);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.sp-references-list li {
+  margin-bottom: 10px;
+}
+
+/* ── Right Column: Sticky Medicines Sidebar ── */
+.sp-sidebar-column {
+  position: sticky;
+  top: 90px;
+}
+
+.sp-sidebar-panel {
+  background-color: #ffffff;
+  border: 1px solid var(--sp-border-input);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.sp-sidebar-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  gap: 8px;
+}
+
+.sp-sidebar-title-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.sp-sidebar-title-top {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--sp-text-main);
+  line-height: 1.2;
+}
+
+.sp-sidebar-title-salt {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--sp-primary);
+  line-height: 1.2;
+}
+
+.sp-sidebar-count-badge {
+  font-size: 12px;
+  color: var(--sp-text-subtle);
+  white-space: nowrap;
+}
+
+/* Search & Sort Controls */
+.sp-search-box {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.sp-search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  color: var(--sp-text-subtle);
+  pointer-events: none;
+}
+
+.sp-search-input {
+  width: 100%;
+  padding: 7px 10px 7px 30px;
+  font-size: 12px;
+  border: 1px solid var(--sp-border-input);
+  border-radius: 8px;
+  background-color: var(--sp-bg-sidebar-toc);
+  color: var(--sp-text-main);
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.sp-search-input:focus {
+  border-color: var(--sp-primary);
+  background-color: #ffffff;
+}
+
+.sp-sort-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  font-size: 12px;
+  color: var(--sp-text-muted);
+}
+
+.sp-sort-select {
+  border: 1px solid var(--sp-border-input);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: var(--sp-text-main);
+  background: #ffffff;
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Medicines Sidebar Item Cards */
+.sp-product-cards-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.sp-product-cards-list::-webkit-scrollbar {
+  width: 4px;
+}
+.sp-product-cards-list::-webkit-scrollbar-thumb {
+  background: var(--sp-border-input);
+  border-radius: 4px;
+}
+
+.sp-med-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--sp-border);
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.sp-med-card:last-child {
+  border-bottom: none;
+}
+
+.sp-med-card:hover {
+  background-color: rgba(124, 58, 237, 0.02);
+}
+
+.sp-med-img-box {
+  width: 46px;
+  height: 46px;
+  border-radius: 8px;
+  border: 1px solid var(--sp-border);
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.sp-med-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.sp-med-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sp-med-icon-box svg {
+  width: 20px;
+  height: 20px;
+}
+
+.sp-med-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.sp-med-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--sp-text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sp-med-manufacturer {
+  font-size: 11.5px;
+  color: var(--sp-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.sp-med-pack {
+  font-size: 11px;
+  color: var(--sp-text-subtle);
+  margin-top: 1px;
+}
+
+.sp-med-price-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+.sp-med-price-new {
+  font-weight: 800;
+  color: var(--sp-text-main);
+}
+
+.sp-med-price-old {
+  font-size: 11px;
+  color: var(--sp-text-subtle);
+  text-decoration: line-through;
+}
+
+.sp-med-discount-pill {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sp-green);
+}
+
+.sp-med-chevron {
+  width: 16px;
+  height: 16px;
+  color: var(--sp-text-subtle);
+  flex-shrink: 0;
+}
+
+/* ── Disclaimer Box ── */
+.sp-disclaimer-card {
+  background-color: #f8fafc;
+  border: 1px solid var(--sp-border-input);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.sp-disclaimer-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.sp-disclaimer-text {
+  font-size: 13px;
+  color: var(--sp-text-body);
+  line-height: 1.7;
+  text-align: justify;
+}
+
+.sp-disclaimer-text strong {
+  color: var(--sp-text-main);
+  font-weight: 700;
+}
+
+/* ── Frequently Asked Questions Section ── */
+.sp-faq-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.sp-faq-card {
+  background-color: #ffffff;
+  border: 1px solid var(--sp-border-input);
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sp-faq-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.sp-faq-question-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.sp-faq-badge {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--sp-primary);
+  background-color: var(--sp-primary-light);
+  padding: 2px 8px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
+.sp-faq-question-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--sp-text-main);
+  margin: 0;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.sp-faq-answer-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 2px;
+}
+
+.sp-faq-answer-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 2px;
+}
+
+.sp-faq-answer-text {
+  font-size: 14px;
+  color: var(--sp-text-body);
+  line-height: 1.7;
+  text-align: justify;
+}
+
+.sp-faq-answer-text p {
+  margin: 0 0 8px 0;
+}
+
+.sp-faq-answer-text p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .sp-faq-card {
+    padding: 14px 16px;
+  }
+  .sp-faq-question-text {
+    font-size: 14px;
+  }
+  .sp-faq-answer-text {
+    font-size: 13px;
+    text-align: left;
+  }
+}

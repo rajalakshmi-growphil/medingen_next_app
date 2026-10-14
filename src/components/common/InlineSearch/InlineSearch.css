@@ -1,0 +1,548 @@
+.inline-search-container {
+    position: relative;
+    width: 100%;
+    height: fit-content;
+}
+
+.inline-search-bar {
+    background-color: #ffffff;
+    border: 2px solid #8B5CF6;
+    border-radius: 14px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px 0 16px;
+    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.12);
+    transition: all 0.25s ease;
+    width: 100%;
+    cursor: text;
+    gap: 10px;
+    box-sizing: border-box;
+}
+
+.inline-search-bar:focus-within {
+    border-color: #7C3AED;
+    box-shadow: 0 4px 18px rgba(124, 58, 237, 0.2);
+}
+
+.inline-search-left-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.inline-search-input {
+    flex: 1;
+    text-align: left;
+    color: #111827;
+    font-family: "Outfit", Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+}
+
+.inline-search-input::placeholder {
+    color: #9CA3AF;
+}
+
+.inline-search-clear-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.inline-search-clear-btn:hover {
+    background-color: #F3F4F6;
+}
+
+.inline-search-button {
+    background-color: #7C3AED;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.inline-search-button:hover {
+    background-color: #6D28D9;
+}
+
+.inline-search-button img {
+    width: 18px;
+    height: 18px;
+    filter: brightness(0) invert(1);
+}
+
+/* Dropdown specific styles */
+.inline-search-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0px 12px 36px rgba(0, 0, 0, 0.16);
+    max-height: 520px;
+    overflow-y: auto;
+    z-index: 1000000;
+    border: 1px solid #E5E7EB;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.inline-search-dropdown-content {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    gap: 12px;
+}
+
+.inline-loader, .inline-error {
+    text-align: center;
+    padding: 24px;
+    font-family: "Outfit", sans-serif;
+    font-size: 14px;
+    color: #6B7280;
+}
+
+.inline-error {
+    color: #EF4444;
+}
+
+.inline-no-product {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    background-color: #F9FAFB;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px dashed #D1D5DB;
+}
+
+.inline-no-product-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 12px;
+    font-family: "Outfit", sans-serif;
+}
+
+.inline-whatsapp-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #7C3AED;
+    color: #ffffff;
+    border-radius: 30px;
+    padding: 8px 18px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.inline-whatsapp-btn:hover {
+    background-color: #6D28D9;
+}
+
+.inline-whatsapp-icon {
+    width: 16px;
+    height: 16px;
+}
+
+/* Quick Suggestions Top Section */
+.inline-quick-suggestions-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #F3F4F6;
+}
+
+.inline-quick-suggestion-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.inline-quick-suggestion-item:hover {
+    background-color: #F5F3FF;
+}
+
+.inline-quick-text {
+    font-family: "Outfit", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.inline-quick-icon {
+    flex-shrink: 0;
+}
+
+.inline-see-all-suggestions {
+    text-align: center;
+    padding-top: 6px;
+    font-family: "Outfit", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #7C3AED;
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+
+.inline-see-all-suggestions:hover {
+    color: #6D28D9;
+    text-decoration: underline;
+}
+
+/* Product Paired Cards */
+.inline-search-product-pairs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.inline-product-pair-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    align-items: stretch;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #f3e8ff;
+    border: 1px solid #ede9fe;
+}
+
+.inline-product-pair-row.single-card {
+    grid-template-columns: 1fr;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+}
+
+.inline-product-pair-row.single-card .inline-card-searched {
+    border-radius: 16px;
+    border: 1px solid #E5E7EB;
+}
+
+.inline-product-pair-row.single-card .inline-card-recommended {
+    border-radius: 16px;
+    border: 1px solid #DDD6FE;
+}
+
+.inline-card-searched {
+    background-color: #ffffff;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-right: 1px solid #f3f4f6;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.inline-card-searched:hover {
+    background-color: #fafafa;
+}
+
+.inline-card-recommended {
+    background-color: #f3e8ff;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.inline-card-recommended:hover {
+    background-color: #ede9fe;
+}
+
+.inline-card-title {
+    font-family: "Outfit", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.35;
+    margin-bottom: 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.inline-card-composition {
+    font-family: "Outfit", sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #6D28D9;
+    margin-bottom: 2px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    white-space: normal;
+}
+
+.inline-card-subtext {
+    font-family: "Outfit", sans-serif;
+    font-size: 11px;
+    color: #9CA3AF;
+    margin-top: 2px;
+    margin-bottom: 6px;
+    line-height: 1.3;
+}
+
+.inline-mfg {
+    color: #9CA3AF;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.inline-pkg {
+    color: #9CA3AF;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.inline-dot {
+    display: none;
+}
+
+.inline-card-price {
+    font-family: "Outfit", sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.inline-card-price-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.inline-rec-price {
+    font-family: "Outfit", sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.inline-rec-old-price {
+    font-family: "Outfit", sans-serif;
+    font-size: 11px;
+    color: #9CA3AF;
+    text-decoration: line-through;
+}
+
+.inline-rec-savings {
+    font-family: "Outfit", sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #8B5CF6;
+}
+
+.inline-rec-badge {
+    align-self: flex-end;
+    margin-top: 4px;
+    background-color: #8B5CF6;
+    color: #ffffff;
+    font-family: "Outfit", sans-serif;
+    font-size: 9px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+/* Bottom Generic Savings Banner */
+.inline-search-bottom-banner {
+    background-color: #7C3AED;
+    color: #ffffff;
+    border-radius: 14px;
+    padding: 10px 16px;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.inline-search-bottom-banner:hover {
+    background-color: #6D28D9;
+}
+
+.inline-banner-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.inline-banner-shield {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.inline-banner-text {
+    font-family: "Outfit", sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.inline-banner-arrow {
+    font-family: "Outfit", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .inline-search-dropdown-content {
+        padding: 10px 8px;
+    }
+    .inline-card-searched,
+    .inline-card-recommended {
+        padding: 10px 8px;
+    }
+    .inline-card-title {
+        font-size: 12.5px;
+    }
+    .inline-card-subtext {
+        font-size: 10px;
+    }
+    .inline-card-price,
+    .inline-rec-price {
+        font-size: 14px;
+    }
+    .inline-rec-old-price,
+    .inline-rec-savings {
+        font-size: 10px;
+    }
+    .inline-rec-badge {
+        font-size: 8.5px;
+        padding: 2px 6px;
+    }
+    .inline-banner-text {
+        font-size: 11px;
+    }
+}
+
+.inline-pagination button {
+    padding: 6px 12px;
+    cursor: pointer;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: "Outfit", Helvetica, sans-serif;
+    transition: all 0.2s;
+}
+
+.inline-pagination button:hover:not(:disabled) {
+    background: #f5f5f5;
+    border-color: #ccc;
+}
+
+.inline-pagination button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background: #fdfdfd;
+}
+
+/* Specific styling for the header search bar integration */
+.header-row-search .inline-search-bar {
+    height: 40px;
+    border-radius: 20px;
+    padding: 0 4px 0 16px;
+}
+
+.header-row-search .inline-search-dropdown {
+    top: calc(100% + 10px);
+    width: 100%;
+}
+
+.header-row-search .inline-search-button {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.header-row-search .inline-search-button img {
+    width: 14px;
+    height: 14px;
+}
+
+.header-row-search .inline-search-input {
+    font-size: 14px;
+}
+
+/* Custom scrollbar for dropdown */
+.inline-search-dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+
+.inline-search-dropdown::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.inline-search-dropdown::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 10px;
+}
+
+.inline-search-dropdown::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+/* Search Suggestions List Layout */
+.inline-search-suggestions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin-top: 12px;
+}
