@@ -4,6 +4,7 @@ import HeadActions from "@/components/common/HeadActions/HeadActions";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { getDefaultAddress, getUser } from "@/api/Api";
 import Cookies from "js-cookie";
+import "./style.css";
 
 
 import { searchProducts, searchSalt, getMainCategories } from "@/api/Api";

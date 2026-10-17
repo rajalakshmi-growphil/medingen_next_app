@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { FaStar, FaChevronLeft, FaChevronRight, FaCommentAlt, FaThumbsUp, FaShareAlt } from "react-icons/fa";
 import "./style.css";
 
-const GoogleIcon = ({ className }) => (
+const GoogleIcon = ({ className }: { className?: string }) => (
   <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100%" height="100%">
     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
     <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -61,7 +61,7 @@ const Testimonials = ({
       if (data?.success) {
         setGoogleRating(Number(data.averageRating).toFixed(1));
         setGoogleReviewCount(data.totalReviewCount.toLocaleString());
-        const sorted = (data.reviews || []).sort((a, b) => new Date(b.createTime) - new Date(a.createTime));
+        const sorted = (data.reviews || []).sort((a: any, b: any) => new Date(b.createTime).getTime() - new Date(a.createTime).getTime());
         setGoogleReviews(sorted);
       }
     } catch (err) {

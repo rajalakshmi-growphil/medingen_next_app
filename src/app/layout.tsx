@@ -83,6 +83,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"
           rel="stylesheet"
         />
+      </head>
+      <body suppressHydrationWarning>
         <Script
           id="gtm-script"
           strategy="afterInteractive"
@@ -109,15 +111,6 @@ gtag('js', new Date());
 gtag('config', 'G-7031KQLTP7', { page_path: window.location.pathname });`,
           }}
         />
-        <script
-          id="dom-patch"
-          suppressHydrationWarning
-          dangerouslySetInnerHTML={{
-            __html: `if(typeof window!=='undefined'&&typeof Node==='function'){var oR=Node.prototype.removeChild;Node.prototype.removeChild=function(c){if(c&&c.parentNode!==this){return c;}return oR.apply(this,arguments);};var oI=Node.prototype.insertBefore;Node.prototype.insertBefore=function(n,r){if(r&&r.parentNode!==this){return n;}return oI.apply(this,arguments);};}`,
-          }}
-        />
-      </head>
-      <body suppressHydrationWarning>
         <Providers>
           <div className="App">
             {children}

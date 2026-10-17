@@ -105,7 +105,10 @@ export const FaqSchema = () => {
     })),
   };
   return (
-    <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+    />
   );
 };
 
@@ -228,6 +231,12 @@ const HowToOrderPanel = () => {
   );
 };
 
+declare global {
+  interface Window {
+    __INITIAL_BANNERS__?: any[];
+  }
+}
+
 export interface DashboardProps {
   initialBanners?: any[];
   initialFooterProducts?: Record<string, any[]> | null;
@@ -247,8 +256,8 @@ export function Dashboard({
     if (Array.isArray(initialBanners) && initialBanners.length > 0) {
       return initialBanners;
     }
-    if (typeof window !== "undefined" && Array.isArray(window.__INITIAL_BANNERS__) && window.__INITIAL_BANNERS__.length > 0) {
-      return window.__INITIAL_BANNERS__;
+    if (typeof window !== "undefined" && Array.isArray((window as any).__INITIAL_BANNERS__) && (window as any).__INITIAL_BANNERS__.length > 0) {
+      return (window as any).__INITIAL_BANNERS__;
     }
     return [];
   });
@@ -518,12 +527,20 @@ export function Dashboard({
       cancelButtonText: "Cancel",
       icon: "question",
       didOpen: () => {
-        const quantityInput = document.getElementById("quantity");
-        let qty = parseInt(quantityInput.value);
-        document.getElementById("increase").addEventListener("click", () => { qty += 1; quantityInput.value = qty; });
-        document.getElementById("decrease").addEventListener("click", () => { if (qty > 1) { qty -= 1; quantityInput.value = qty; } });
+        const quantityInput = document.getElementById("quantity") as HTMLInputElement | null;
+        let qty = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
+        document.getElementById("increase")?.addEventListener("click", () => {
+          qty += 1;
+          if (quantityInput) quantityInput.value = String(qty);
+        });
+        document.getElementById("decrease")?.addEventListener("click", () => {
+          if (qty > 1) {
+            qty -= 1;
+            if (quantityInput) quantityInput.value = String(qty);
+          }
+        });
       },
-      preConfirm: () => document.getElementById("quantity").value,
+      preConfirm: () => (document.getElementById("quantity") as HTMLInputElement)?.value,
     });
 
     if (quantity && quantity > 0) {
@@ -669,7 +686,7 @@ export function Dashboard({
     onSwipedRight: () => handleDotVClick((currentVIndex - 1 + videoSlides.length) % videoSlides.length),
   });
 
-  const [slidesPerView, setSlidesPerView] = useState("auto");
+  const [slidesPerView, setSlidesPerView] = useState<number | "auto">("auto");
   const updateSlidesPerView = () => {
     if (typeof window !== "undefined") {
       setSlidesPerView(window.innerWidth < 800 ? 1 : window.innerWidth / 500);
@@ -692,7 +709,7 @@ export function Dashboard({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleBannerClick = () => navigate("/offers");
+  const handleBannerClick = (_tnc?: any) => navigate("/offers");
 
   return (
     <>
@@ -875,7 +892,10 @@ export function Dashboard({
                           <img
                             src={getSubcategoryImage(cat.title)}
                             alt={cat.title}
-                            onError={(e) => (e.target.src = "/medicine-details.png")}
+                            onError={(e) => {
+                              const target = e.currentTarget as HTMLImageElement;
+                              target.src = "/medicine-details.png";
+                            }}
                           />
                         </div>
                         <span className="sbc-sidebar-label">{cat.title}</span>
@@ -926,7 +946,10 @@ export function Dashboard({
                                   <img
                                     src={getSubcategoryImage(subName)}
                                     alt={subName}
-                                    onError={(e) => (e.target.src = "/medicine-details.png")}
+                                    onError={(e) => {
+                                      const target = e.currentTarget as HTMLImageElement;
+                                      target.src = "/medicine-details.png";
+                                    }}
                                   />
                                 </div>
                               </Link>

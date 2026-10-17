@@ -641,26 +641,23 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           }}
         />
       )}
-      <script
+      <template
         id="server-initial-product"
-        type="application/json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(productData).replace(/</g, '\\u003c'),
         }}
       />
       {altProducts.length > 0 && (
-        <script
+        <template
           id="server-initial-alts"
-          type="application/json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(altProducts).replace(/</g, '\\u003c'),
           }}
         />
       )}
       {freqMeds.length > 0 && (
-        <script
+        <template
           id="server-initial-freq-meds"
-          type="application/json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(freqMeds).replace(/</g, '\\u003c'),
           }}

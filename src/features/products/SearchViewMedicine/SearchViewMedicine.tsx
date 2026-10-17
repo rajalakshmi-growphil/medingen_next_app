@@ -1235,7 +1235,7 @@ const SubstitutionComparison = ({
             <div style={{ fontSize: "11px", color: "#9ca3af", marginTop: "2px" }}>Inclusive of all taxes</div>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "24px" }}>
+          <div style={{ display: "none" }}>
              <img src="/google.svg" alt="" style={{ width: "16px" }} />
              <Stars n={displayRating} />
              <span style={{ fontSize: "14px", fontWeight: "700" }}>{displayRating} ({displayReviewCount} Reviews)</span>
@@ -1576,7 +1576,7 @@ const SubstitutionComparison = ({
                 <p style={{ fontSize: 13, color: "#6b7280", marginBottom: 14 }}>Brand: <strong style={{ color: "#7c3aed" }}>{recommendedProduct.manufacturer}</strong></p>
               )}
               
-              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 16 }}>
+              <div style={{ display: "none" }}>
                 <img src="/google.svg" alt="" style={{ width: 16, height: 16 }} />
                 <Stars n={displayRating} />
                 <span style={{ fontWeight: 800, fontSize: 13 }}>{displayRating} ({displayReviewCount} Reviews)</span>
@@ -1791,9 +1791,10 @@ export default function SearchViewMedicine({
       init = (window as any).__INITIAL_PRODUCT__;
       if (!init) {
         const scriptEl = document.getElementById("server-initial-product");
-        if (scriptEl && scriptEl.textContent) {
+        const rawContent = scriptEl?.textContent || scriptEl?.innerHTML;
+        if (rawContent) {
           try {
-            init = JSON.parse(scriptEl.textContent);
+            init = JSON.parse(rawContent);
             (window as any).__INITIAL_PRODUCT__ = init;
           } catch (_) {}
         }
@@ -1909,9 +1910,10 @@ export default function SearchViewMedicine({
     if (initialAltProducts && initialAltProducts.length > 0) return initialAltProducts;
     if (typeof window !== "undefined") {
       const scriptEl = document.getElementById("server-initial-alts");
-      if (scriptEl && scriptEl.textContent) {
+      const rawContent = scriptEl?.textContent || scriptEl?.innerHTML;
+      if (rawContent) {
         try {
-          return JSON.parse(scriptEl.textContent);
+          return JSON.parse(rawContent);
         } catch (_) {}
       }
     }
@@ -3006,7 +3008,7 @@ export default function SearchViewMedicine({
         {!isMobile ? (
           /* ───── DESKTOP VIEW ───── */
           <div style={{ maxWidth: 1300, margin: "0 auto", padding: "0 32px", position: "relative" }}>
-            {recommendedAlt && (
+            {recommendedAlt ? (
               <SubstitutionComparison 
                 searchedProduct={{
                   product_id: product.product_id,
@@ -3020,7 +3022,8 @@ export default function SearchViewMedicine({
                   inStock: product.inStock,
                   selectedCategory: product.selectedCategory,
                   rc: product.rc,
-                  genericName: product.genericName
+                  genericName: product.genericName,
+                  manufacturer: medicineDetails?.sellerInfo || product.manufacturer || ""
                 }}
                 recommendedProduct={recommendedAlt}
                 onNotify={handleNotifyAlt}
@@ -3045,9 +3048,9 @@ export default function SearchViewMedicine({
                 onZoomImage={(targetSlides, index = 0) => { setModalSlides(targetSlides); setModalIdx(index); }}
                 handleCategoryClick={handleCategoryClick}
               />
-            )}
-            {isAltLoading && !recommendedAlt && <ComparisonSkeleton isMobile={false} />}
-            <div style={{ display: (isAltLoading || recommendedAlt) ? "none" : "block" }}>
+            ) : isAltLoading ? (
+              <ComparisonSkeleton isMobile={false} />
+            ) : (
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 52, alignItems: "start", paddingTop: 24 }}>
 
 
@@ -3177,7 +3180,7 @@ export default function SearchViewMedicine({
                   </div>
                 )}
 
-                <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 18 }}>
+                <div style={{ display: "none" }}>
                   <img src="/google.svg" alt="Google" style={{ width: 17, height: 17 }} />
                   <Stars n={googleRating || 0} />
                   <span style={{ fontWeight: 700, color: "#374151", fontSize: 14 }}>{googleRating || "0"}</span>
@@ -3303,7 +3306,7 @@ export default function SearchViewMedicine({
                 ))}
               </div>
             </div>
-            </div>
+            )}
             {altProducts.length > 1 && (
               <div style={{ marginTop: 40 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
@@ -3555,7 +3558,7 @@ export default function SearchViewMedicine({
         ) : (
           /* ───── MOBILE VIEW ───── */
           <div style={{ display: "flex", flexDirection: "column", background: "#fff" }}>
-            {recommendedAlt && (
+            {recommendedAlt ? (
               <SubstitutionComparison 
                 searchedProduct={{
                   product_id: product.product_id,
@@ -3569,7 +3572,8 @@ export default function SearchViewMedicine({
                   inStock: product.inStock,
                   selectedCategory: product.selectedCategory,
                   rc: product.rc,
-                  genericName: product.genericName
+                  genericName: product.genericName,
+                  manufacturer: medicineDetails?.sellerInfo || product.manufacturer || ""
                 }}
                 recommendedProduct={recommendedAlt}
                 onNotify={handleNotifyAlt}
@@ -3594,11 +3598,11 @@ export default function SearchViewMedicine({
                 onZoomImage={(targetSlides, index = 0) => { setModalSlides(targetSlides); setModalIdx(index); }}
                 handleCategoryClick={handleCategoryClick}
               />
-            )}
-            {isAltLoading && !recommendedAlt && <ComparisonSkeleton isMobile={true} />}
-
-            <div style={{ display: (isAltLoading || recommendedAlt) ? "none" : "block" }}>
-              <div style={{ position: "relative", background: "#f9fafb", padding: "16px 16px 0", overflow: "hidden" }}>
+            ) : isAltLoading ? (
+              <ComparisonSkeleton isMobile={true} />
+            ) : (
+              <div>
+                <div style={{ position: "relative", background: "#f9fafb", padding: "16px 16px 0", overflow: "hidden" }}>
                 {savingsPct > 0 && <div style={{ position: "absolute", top: 16, right: 16, background: "#8b5cf6", color: "#fff", padding: "4px 10px", borderRadius: 8, fontSize: 12, fontWeight: 700, zIndex: 10 }}>Save {savingsPct}%</div>}
                 
                 <div className="sv-product-card" style={{ width: "100%", height: 280, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "visible", cursor: "zoom-in" }} onClick={() => { setModalSlides(slides); setModalIdx(currentSlide); }}>
@@ -3681,7 +3685,7 @@ export default function SearchViewMedicine({
                 {savingsNum > 0 && <span style={{ fontSize: 14, color: "#16a34a", fontWeight: 700 }}>Save ₹{savings}</span>}
               </div>
               <div style={{ fontSize: 11, color: "#9ca3af", marginBottom: 14 }}>Inclusive of all taxes</div>
-              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 20, flexWrap: "wrap" }}>
+              <div style={{ display: "none" }}>
                 <img src="/google.svg" width={15} height={15} style={{ width: 15, height: 15 }} alt="Google" />
                 <Stars n={googleRating || 0} />
                 <span style={{ fontSize: 13, fontWeight: 700, color: "#374151" }}>{googleRating || "0"}</span>
@@ -3797,6 +3801,7 @@ export default function SearchViewMedicine({
               </div>
             </div>
             </div>
+            )}
 
             {altProducts.length > 1 && (
               <div style={{ padding: "0 16px", marginBottom: 24 }}>

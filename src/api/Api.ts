@@ -12,6 +12,7 @@ export const API_ENDPOINT = 'https://medingen.in/api/';
 // export const API_ENDPOINT = 'https://csjsgf3b-8001.inc1.devtunnels.ms/api/';
 // export const API_ENDPOINT = 'https://7fk935k7-8001.inc1.devtunnels.ms/api/';
 // export const API_ENDPOINT = 'https://xnbrsblh-8001.inc1.devtunnels.ms/api/';
+
 const handleSignOut = () => {
   Cookies.remove('jwt_token');
   Cookies.remove('customer_name');
@@ -1428,7 +1429,7 @@ export const deleteAddress = async (addressId, customerId, navigate) => {
   Swal.fire("Deleted!", "Address deleted successfully.", "success");
 };
 
-export const listPrescriptions = async (navigate) => {
+export const listPrescriptions = async (navigate?: any) => {
   try {
     const token = checkToken(navigate);
     if (!token) return [];
@@ -1550,17 +1551,22 @@ export const searchVector = async (search_term) => {
 };
 
 export const searchProducts = async (
-  searchText,
-  page = 1,
-  { category_name = "", show_hidden = false } = {}
+  searchText: any,
+  page: any = 1,
+  { category_name = "", show_hidden = false, query = "", ...rest }: any = {}
 ) => {
   try {
-    const response = await axios.post(`${API_ENDPOINT}products`, {
+    const payload: any = {
       text: searchText,
       page,
       category_name,
-      show_hidden
-    });
+      show_hidden,
+      ...rest
+    };
+    if (query) {
+      payload.query = query;
+    }
+    const response = await axios.post(`${API_ENDPOINT}products`, payload);
 
     return response.data;
   } catch (error) {
@@ -1697,7 +1703,7 @@ export async function requestProduct(productId, customerId, prescriptionId, mode
   }
 }
 
-export const addToCart = async (productId = null, prescriptionId = 0, quantity = 1, navigate) => {
+export const addToCart = async (productId = null, prescriptionId = 0, quantity = 1, navigate?: any) => {
   try {
     const token = checkToken(navigate);
     if (!token) return;

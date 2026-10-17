@@ -10,6 +10,26 @@ const categoryData = [];
 
 export { categoryData };
 
+interface InitialFilters {
+  subCategories?: any[];
+  dosageForm?: any[];
+  saltComposition?: string;
+  mainCategory?: string;
+  dosageOptions?: any;
+  [key: string]: any;
+}
+
+interface CategoryPageFilterProps {
+  onSelectCategory?: (category: any) => void;
+  onSelectGroup?: (group: any) => void;
+  onFilterChange?: (filters: any) => void;
+  hideSubcategories?: boolean;
+  hideHeader?: boolean;
+  dynamicData?: any;
+  loading?: boolean;
+  initialFilters?: InitialFilters;
+}
+
 export const CategoryPageFilter = ({
   onSelectCategory,
   onSelectGroup,
@@ -18,8 +38,8 @@ export const CategoryPageFilter = ({
   hideHeader = false,
   dynamicData = null,
   loading = false,
-  initialFilters = {} // Accept initial filters from parent
-}) => {
+  initialFilters = {}
+}: CategoryPageFilterProps) => {
   const location = useLocation();
   const [expandedGroup, setExpandedGroup] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);

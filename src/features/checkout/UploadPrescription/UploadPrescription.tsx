@@ -1,5 +1,5 @@
 "use client";
-import { React, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style.css";
 import Header from "@/features/home/Dashboard/Header";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -10,8 +10,13 @@ import { getUser } from "@/api/Api";
 
 import { Helmet } from "react-helmet";
 
-export const UploadPrescription = ({ choosePrescription }) => {
-  const [methodSelected, setMethodSelected] = useState(false);
+interface UploadPrescriptionProps {
+  choosePrescription?: (id?: any) => void;
+}
+
+export const UploadPrescription = ({ choosePrescription }: UploadPrescriptionProps) => {
+  const [methodSelected, setMethodSelected] = useState<any>(false);
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {

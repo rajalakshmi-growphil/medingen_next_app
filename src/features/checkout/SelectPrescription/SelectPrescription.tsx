@@ -12,7 +12,11 @@ import { Helmet } from "react-helmet";
 
 const MySwal = withReactContent(Swal);
 
-export const SelectPrescription = ({ choosePrescription }) => {
+interface SelectPrescriptionProps {
+  choosePrescription?: (id?: any) => void;
+}
+
+export const SelectPrescription = ({ choosePrescription }: SelectPrescriptionProps) => {
   const location = useLocation()
   const [prescriptions, setPrescriptions] = useState([]);
   const [selectedPrescriptionId, setSelectedPrescriptionId] = useState(null);
@@ -60,7 +64,7 @@ export const SelectPrescription = ({ choosePrescription }) => {
 
     const fetchData = async () => {
       Swal.showLoading();
-      const data = await listPrescriptions();
+      const data = await listPrescriptions(navigate);
       if (data.length === 0) {
         Swal.fire({
           title: "Upload your first prescription",
@@ -68,7 +72,6 @@ export const SelectPrescription = ({ choosePrescription }) => {
           icon: "info",
           confirmButtonText: "OK",
         }).then(() => {
-          // Navigate back to the previous page
           navigate(-1);
         });
         setShowProceedButton(false);

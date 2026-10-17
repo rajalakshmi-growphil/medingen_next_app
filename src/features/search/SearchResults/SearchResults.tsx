@@ -15,7 +15,7 @@ export const SearchResults = () => {
   const location = useLocation();
   const { refreshCartCount } = useCart();
 
-  const queryFromUrl = searchParams.get("q") || "";
+  const queryFromUrl = searchParams.get("q") || searchParams.get("query") || "";
   const queryFromState = location.state?.query || location.state?.product?.name || "";
   const initialQuery = queryFromUrl || queryFromState || "";
 
@@ -27,10 +27,11 @@ export const SearchResults = () => {
   const [addingId, setAddingId] = useState(null);
 
   useEffect(() => {
-    if (queryFromUrl) {
-      setSearchQuery(queryFromUrl);
+    const q = searchParams.get("q") || searchParams.get("query") || "";
+    if (q) {
+      setSearchQuery(q);
     }
-  }, [queryFromUrl]);
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchResults = async () => {

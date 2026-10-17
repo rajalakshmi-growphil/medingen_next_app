@@ -19,7 +19,11 @@ import { Helmet } from "react-helmet";
 // API Endpoint for geoapify
 const GEOAPIFY_API_KEY = "b7ac31a270df4a0c8a896740e2e96493";
 
-export const SavedAddress = ({ chooseAddress }) => {
+interface SavedAddressProps {
+  chooseAddress?: (addressId?: any) => void;
+}
+
+export const SavedAddress = ({ chooseAddress }: SavedAddressProps) => {
   // Accept chooseAddress as a prop
   const [addresses, setAddresses] = useState([]);
   const [currentLocation, setCurrentLocation] = useState("");

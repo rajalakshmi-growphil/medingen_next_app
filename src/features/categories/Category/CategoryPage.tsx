@@ -99,7 +99,7 @@ const ResponsiveCategoryView = ({ categories, allCategories, onSelectSubCategory
               onClick={() => onSelectSubCategory(sub)}
             >
               <div className="sub-cat-img-wrapper">
-                <img src={getSubCatImage(sub)} alt={sub} onError={(e) => e.target.src = "/medicine-details.png"} />
+                <img src={getSubCatImage(sub)} alt={sub} onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/medicine-details.png"; }} />
               </div>
               <span>{toTitleCase(sub)}</span>
             </div>
@@ -110,7 +110,7 @@ const ResponsiveCategoryView = ({ categories, allCategories, onSelectSubCategory
   );
 };
 
-const MobileProductCard = ({ product, onAddToCart, onUpdateQuantity, navigate, cartItems = [], categoryState = {} }) => {
+const MobileProductCard = ({ product, onAddToCart, onUpdateQuantity, navigate, cartItems = [], categoryState = {} }: any) => {
   const oldPrice = parseFloat(product.product_pricing_old) || 0;
   const newPrice = parseFloat(product.product_pricing_new || product.product_pricing_old) || 0;
   const savings = oldPrice > newPrice && oldPrice > 0
@@ -141,7 +141,7 @@ const MobileProductCard = ({ product, onAddToCart, onUpdateQuantity, navigate, c
         <img
           src={`https://d1dh0rr5xj2p49.cloudfront.net/products/${product.first_image_url}`}
           alt={product.product_name}
-          onError={(e) => { e.target.onerror = null; e.target.src = "/medicine-details.png" }}
+          onError={(e) => { const target = e.currentTarget as HTMLImageElement; target.onerror = null; target.src = "/medicine-details.png"; }}
         />
       </div>
       <div className="mobile-card-content">
@@ -745,7 +745,7 @@ export const CategoryPage = () => {
         <meta name="twitter:description" content={pageDescription} />
       </Helmet>
       <div className="category-container" onScroll={(e) => {
-        if (e.target.scrollTop > 300) {
+        if (e.currentTarget.scrollTop > 300) {
           setShowGoToTop(true);
         } else {
           setShowGoToTop(false);
@@ -932,7 +932,7 @@ export const CategoryPage = () => {
                   <div className="filter-coming-soon-content">
                     <div className="filter-icon-container">
                       <div className="filter-glow-effect"></div>
-                      <img src="/filter-icon-premium.png" alt="Coming Soon" className="filter-floating-icon" onError={(e) => { e.target.onerror = null; e.target.src = "/migfulllogo.svg" }} />
+                      <img src="/filter-icon-premium.png" alt="Coming Soon" className="filter-floating-icon" onError={(e) => { const target = e.currentTarget as HTMLImageElement; target.onerror = null; target.src = "/migfulllogo.svg"; }} />
                     </div>
                     <h2 className="filter-coming-soon-title">Filters Refresh!</h2>
                     <p className="filter-coming-soon-subtitle">We're building an advanced filter experience just for you.</p>
@@ -1049,7 +1049,7 @@ export const CategoryPage = () => {
                               <img
                                 src={`https://d1dh0rr5xj2p49.cloudfront.net/products/${product.first_image_url}`}
                                 alt={product.product_name}
-                                onError={(e) => { e.target.onerror = null; e.target.src = "/medicine-details.png" }}
+                                onError={(e) => { const target = e.currentTarget as HTMLImageElement; target.onerror = null; target.src = "/medicine-details.png"; }}
                               />
                             </div>
 

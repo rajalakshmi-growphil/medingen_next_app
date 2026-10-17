@@ -45,6 +45,11 @@ const ProductSection = ({ title, categoryKey, initialProducts = [] }: ProductSec
     });
     const navigate = useNavigate();
     const { cartItems, refreshCartCount, cartId } = useCart();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     // Unique class names for navigation to avoid conflicts between multiple instances
     const prevClass = `nav-prev-${categoryKey}`;
@@ -256,7 +261,7 @@ const ProductSection = ({ title, categoryKey, initialProducts = [] }: ProductSec
                           return (cartPid !== "" && cartPid === currentPid) || 
                                  (cartName !== "" && cartName === currentName);
                         });
-                        const quantityInCart = cartItem ? parseInt(cartItem.quantity || cartItem.qty || 0) : 0;
+                        const quantityInCart = mounted && cartItem ? parseInt(cartItem.quantity || cartItem.qty || 0) : 0;
 
                         return (
                             <SwiperSlide key={`${product.product_id}-${idx}`} className="top-selling-slide">
@@ -289,7 +294,7 @@ const ProductSection = ({ title, categoryKey, initialProducts = [] }: ProductSec
                                         </Link>
                                         <div className="top-selling-prod-mfr">By {product.manufacturer}</div>
 
-                                        <div className="top-selling-details-footer">
+                                        <div className="top-selling-details-footer" suppressHydrationWarning>
                                             <div className="top-selling-price-block">
                                                 <div className="top-selling-our-price-row">
                                                     <span className="ts-main-price">₹{ourPrice.toFixed(0)}</span>

@@ -43,6 +43,7 @@ const getHomepageFooterProducts = cache(async () => {
   try {
     const res = await fetch('https://medingen.in/api/footer-products', {
       next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(5000),
     });
     if (!res.ok) return null;
     const data = await res.json();
@@ -65,6 +66,7 @@ const getHomepageBanners = cache(async () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ section: 'home_banner' }),
       next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(5000),
     });
     if (!res.ok) return [];
     const data = await res.json();
@@ -78,8 +80,8 @@ const getHomepageBanners = cache(async () => {
 const getHomepageCategories = cache(async () => {
   try {
     const [mainRes, allRes] = await Promise.all([
-      fetch('https://medingen.in/api/main_categories', { next: { revalidate: 3600 } }),
-      fetch('https://medingen.in/api/all_categories', { next: { revalidate: 3600 } }),
+      fetch('https://medingen.in/api/main_categories', { next: { revalidate: 3600 }, signal: AbortSignal.timeout(5000) }),
+      fetch('https://medingen.in/api/all_categories', { next: { revalidate: 3600 }, signal: AbortSignal.timeout(5000) }),
     ]);
 
     const hierarchy = mainRes.ok ? await mainRes.json() : [];
@@ -141,6 +143,7 @@ const getHomepageReviews = cache(async () => {
   try {
     const res = await fetch('https://featurable.com/api/v1/widgets/fb210dba-0301-4000-982d-6e8006ca39f3', {
       next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(5000),
     });
     if (!res.ok) return null;
     const data = await res.json();

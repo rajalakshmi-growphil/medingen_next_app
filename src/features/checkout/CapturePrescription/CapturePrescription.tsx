@@ -9,10 +9,15 @@ import { uploadFile, updatePrescription, addToCart, getUser, requestProduct } fr
 
 import Navigation from "@/features/home/Dashboard/Navigation";
 
+interface CapturePrescriptionProps {
+  choosePrescription?: (prescriptionId?: any) => void;
+  isUpload?: boolean;
+}
+
 export const CapturePrescription = ({
   choosePrescription,
   isUpload = false,
-}) => {
+}: CapturePrescriptionProps) => {
   const webcamRef = useRef(null);
   const fileInputRef = useRef(null); // Ref for file input
   const [image, setImage] = useState(null);
