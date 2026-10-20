@@ -503,43 +503,8 @@ export const CategoryPage = () => {
     }));
   };
 
-  useEffect(() => {
-    if (isPrerender) return;
-    const handleAlternate = async (salt_name, category) => {
-      try {
-        searchProducts("", 1, {
-          query: "salt_name = '" + salt_name + "' AND categories = '" + category + "' AND rc=1",
-        }).then((results) => {
-          if (results.results.length > 0) {
-            setAlternate((prev) => ({
-              ...prev,
-              [salt_name]: results.results,
-            }));
-          } else {
-            setFilteredSuggestions((prev) =>
-              prev.filter((item) => item.salt_name !== salt_name)
-            );
-            setAlternate((prev) => ({
-              ...prev,
-              [salt_name]: null,
-            }));
-          }
-        });
-      } catch (error) {
-        setError("Failed to fetch products. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    for (const item of (filteredSuggestions || [])) {
-      const salt = item.salt_name;
-      const category = item.selected_category;
-      if (!alternate[salt]) {
-        handleAlternate(salt, category);
-      }
-    }
-  }, [filteredSuggestions]);
+  // handleAlternate previously purged all products from filteredSuggestions when category was undefined.
+  // Neither alternate state nor this filtering is used by the Category product grid.
 
   // Click outside to close sort dropdown
   useEffect(() => {

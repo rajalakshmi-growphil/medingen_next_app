@@ -234,43 +234,8 @@ if (mainCategory) {
     }));
   };
 
-  useEffect(() => {
-    const handleAlternate = async (salt_name, category) => {
-      try {
-        searchProducts("", 1, {
-          query: "salt_name = '" + salt_name + "' AND categories = '" + category + "' AND rc=1",
-        }).then((results) => {
-          console.log("Alternate Products", results, "salt_name", salt_name);
-          if (results.results.length > 0) {
-            setAlternate((prev) => ({
-              ...prev,
-              [salt_name]: results.results,
-            }));
-          } else {
-            setFilteredSuggestions((prev) =>
-              prev.filter((item) => item.salt_name !== salt_name)
-            );
-            setAlternate((prev) => ({
-              ...prev,
-              [salt_name]: null,
-            }));
-          }
-        });
-      } catch (error) {
-        setError("Failed to fetch products. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    for (const item of (filteredSuggestions || [])) {
-      const salt = item.salt_name;
-      const category = item.selected_category;
-      if (!alternate[salt]) {
-        handleAlternate(salt, category);
-      }
-    }
-  }, [filteredSuggestions]);
+  // handleAlternate previously purged all products from filteredSuggestions when category was undefined.
+  // Neither alternate state nor this filtering is used by the Category product grid.
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -322,7 +287,16 @@ if (mainCategory) {
                 <div className="filter-coming-soon-content">
                   <div className="filter-icon-container">
                     <div className="filter-glow-effect"></div>
-                    <img src="/filter-icon-premium.png" alt="Coming Soon" className="filter-floating-icon" onError={(e) => { e.target.onerror = null; e.target.src = "/migfulllogo.svg" }} />
+                    <img
+                      src="/filter-icon-premium.png"
+                      alt="Coming Soon"
+                      className="filter-floating-icon"
+                      onError={(e) => {
+                        const target = e.currentTarget as HTMLImageElement;
+                        target.onerror = null;
+                        target.src = "/migfulllogo.svg";
+                      }}
+                    />
                   </div>
                   <h2 className="filter-coming-soon-title">Filters Refresh!</h2>
                   <p className="filter-coming-soon-subtitle">We're building an advanced filter experience just for you.</p>
@@ -374,9 +348,9 @@ if (mainCategory) {
                           <div className="card-price-row">
                             <span className="price-mrp-label">MRP</span>
                             <span className="price-mrp-val">₹{parseInt(product.product_pricing_old)}</span>
-                            {product.product_pricing_new && product.product_pricing_new < product.product_pricing_old && (
+                            {product.product_pricing_new && Number(product.product_pricing_new) < Number(product.product_pricing_old) && (
                               <span className="price-discount">
-                                {parseInt(((product.product_pricing_old - product.product_pricing_new) / product.product_pricing_old) * 100)}% Off
+                                {Math.round(((Number(product.product_pricing_old) - Number(product.product_pricing_new)) / Number(product.product_pricing_old)) * 100)}% Off
                               </span>
                             )}
                           </div>

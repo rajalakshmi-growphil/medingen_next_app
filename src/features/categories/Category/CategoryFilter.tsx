@@ -8,6 +8,15 @@ const categoryData = [];
 
 export { categoryData };
 
+interface CategoryFilterProps {
+  onSelectCategory?: (category: any) => void;
+  onSelectGroup?: (group: any) => void;
+  hideSubcategories?: boolean;
+  hideHeader?: boolean;
+  dynamicData?: any;
+  loading?: boolean;
+}
+
 export const CategoryFilter = ({
   onSelectCategory,
   onSelectGroup,
@@ -15,7 +24,7 @@ export const CategoryFilter = ({
   hideHeader = false,
   dynamicData = null,
   loading = false, 
-}) => {
+}: CategoryFilterProps) => {
   const location = useLocation();
   const [expandedGroup, setExpandedGroup] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);

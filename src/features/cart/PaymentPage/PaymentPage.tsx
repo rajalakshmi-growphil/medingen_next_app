@@ -24,12 +24,12 @@ import { FiShield, FiRefreshCw, FiSmartphone, FiCopy, FiCheck, FiPhone, FiHeadph
 import { BsPatchCheckFill, BsCheck2Circle } from "react-icons/bs";
 import { IoSparkles, IoLocationSharp, IoCall } from "react-icons/io5";
 import Swal from "sweetalert2";
-import { 
-  create_order, 
-  check_payment, 
+import {
+  create_order,
+  check_payment,
   getCartData,
-  getCartDataForID, 
-  updateCODCharge, 
+  getCartDataForID,
+  updateCODCharge,
   cancelOrder,
   listAddresses,
   addAddress,
@@ -93,7 +93,12 @@ export const PaymentPage = () => {
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [isSyncingCOD, setIsSyncingCOD] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [dtdcAvailable, setDtdcAvailable] = useState(true);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const payButtonRef = useRef(null);
   const termsRef = useRef(null);
   const scannerRef = useRef(null);
@@ -184,16 +189,16 @@ export const PaymentPage = () => {
       if (deliveryAddress && deliveryAddress.pincode) {
         const pinString = String(deliveryAddress.pincode).trim();
         const firstDigit = pinString.charAt(0);
-        
+
         if (["5", "6"].includes(firstDigit)) { expectedShipping = 50; }
         else if (["1", "2", "3", "4", "7", "8"].includes(firstDigit)) { expectedShipping = 60; }
-        
+
         const totalSellingPrice = safeParseFloat(orderSummary.total_selling_price);
-        const freeDeliveryApplied = 
-          (cartData.offerTitle || "").toLowerCase().includes("free delivery") || 
-          (cartData.offerTitle || "").toLowerCase().includes("free deivery") || 
+        const freeDeliveryApplied =
+          (cartData.offerTitle || "").toLowerCase().includes("free delivery") ||
+          (cartData.offerTitle || "").toLowerCase().includes("free deivery") ||
           totalSellingPrice >= 500;
-        
+
         if (freeDeliveryApplied) { expectedShipping = 0; }
       }
       const currentShipping = safeParseFloat(orderSummary.total_shipping_charge);
@@ -208,7 +213,7 @@ export const PaymentPage = () => {
         if (currentShipping !== expectedShipping) {
           await updateDeliveryCharge(cartId, expectedShipping);
         }
-        
+
         const res = await getCartDataForID(cartId);
         if (res && res.status === 200) {
           setCartData(res.data);
@@ -232,7 +237,7 @@ export const PaymentPage = () => {
           const res = await checkDTDCAvailability(pin);
           const available = res && res.dtdc_available !== false;
           setDtdcAvailable(available);
-          
+
           if (!available && selectedMethod === 'cod') {
             setSelectedMethod('upi');
           }
@@ -264,12 +269,12 @@ export const PaymentPage = () => {
         }
 
         const status = (data.cartStatus || data.cart_status || "").toLowerCase();
-        
+
         if (status !== "confirm") {
           navigate("/cart");
           return;
         }
-        
+
         setCartData(data);
       }
     } catch (error) {
@@ -285,7 +290,7 @@ export const PaymentPage = () => {
     return () => clearInterval(interval);
   }, [fetchCartData]);
 
-  if (loading || !cartData) {
+  if (!mounted || loading || !cartData) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#f8f7ff' }}>
         <FiRefreshCw className="pp-spin" size={32} color="#7c3aed" />
@@ -296,14 +301,14 @@ export const PaymentPage = () => {
   const totalMRP = orderSummary.totalMRP || "₹0.00";
   const totalSavings = orderSummary.totalSavings || "₹0.00";
   const shippingCharge = safeParseFloat(orderSummary.total_shipping_charge);
-  
+
   // Dynamic Calculation to enforce UI state immediately
   const isCodValid = selectedMethod === 'cod' && dtdcAvailable;
   const backendCod = safeParseFloat(orderSummary.cod_charge);
   const codCharge = isCodValid ? 60 : 0;
-  
+
   const backendTotalAmount = safeParseFloat(orderSummary.totalAmount);
-  
+
   // Robustly extract the base amount for the 5% offer discount
   const totalAmt = (() => {
     const val = orderSummary?.total_selling_price;
@@ -346,7 +351,7 @@ export const PaymentPage = () => {
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
     script.onload = () => {
       const options = {
-        key: "rzp_live_gD2p7TIiAYtioQ",
+        key: "rzp_live_TormsyiU5Kc7iX",
         amount: amount_due,
         currency: "INR",
         name: "Medingen",
@@ -367,9 +372,9 @@ export const PaymentPage = () => {
               confirmButtonColor: "#7c3aed",
             }).then(() => {
               navigate("/cart/pharmacist-verification/payment/place-order", {
-                state: { 
-                  total_amount: totalAmount, 
-                  cart_id, 
+                state: {
+                  total_amount: totalAmount,
+                  cart_id,
                   coupon_savings: couponSavings,
                   payment_method: "online",
                   deliveryAddress
@@ -427,7 +432,7 @@ export const PaymentPage = () => {
 
         const message = `Hello, I've placed an order and paid via UPI Scanner. Order ID: ${cart_id}. Total Amount: ₹${totalAmount.toFixed(2)}`;
         const whatsappUrl = `https://wa.me/917090123709?text=${encodeURIComponent(message)}`;
-        
+
         window.open(whatsappUrl, "_blank");
         Swal.fire({
           title: "Submit on WhatsApp",
@@ -437,9 +442,9 @@ export const PaymentPage = () => {
           confirmButtonColor: "#7c3aed",
         }).then(() => {
           navigate("/cart/pharmacist-verification/payment/place-order", {
-            state: { 
-              total_amount: totalAmount, 
-              cart_id, 
+            state: {
+              total_amount: totalAmount,
+              cart_id,
               coupon_savings: couponSavings,
               payment_method: "upi_scanner",
               deliveryAddress
@@ -472,9 +477,9 @@ export const PaymentPage = () => {
         Swal.close();
 
         navigate("/cart/pharmacist-verification/payment/place-order", {
-          state: { 
-            total_amount: totalAmount, 
-            cart_id, 
+          state: {
+            total_amount: totalAmount,
+            cart_id,
             coupon_savings: couponSavings,
             payment_method: "cod",
             deliveryAddress,
@@ -532,7 +537,7 @@ export const PaymentPage = () => {
     const padding = 60;
     const footerHeight = 180;
     const headerHeight = 160;
-    
+
     canvas.width = qrSize + (padding * 2);
     canvas.height = qrSize + headerHeight + footerHeight;
 
@@ -550,9 +555,9 @@ export const PaymentPage = () => {
     const logo = new Image();
     logo.crossOrigin = "anonymous";
     logo.src = "/android-chrome-192x192.png";
-    
+
     const upiData = `upi://pay?pa=${UPI_ID}&pn=Medingen&am=${totalAmount.toFixed(2)}&cu=INR`;
-    
+
     const qrImage = new Image();
     qrImage.crossOrigin = "anonymous";
     qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&ecc=H&data=${encodeURIComponent(upiData)}`;
@@ -560,7 +565,7 @@ export const PaymentPage = () => {
     qrImage.onload = () => {
       // Draw QR
       ctx.drawImage(qrImage, padding, headerHeight + 20, qrSize, qrSize);
-      
+
       // Header Text
       ctx.fillStyle = "#ffffff";
       ctx.font = "bold 44px 'Inter', sans-serif";
@@ -572,11 +577,11 @@ export const PaymentPage = () => {
       // Footer Info
       ctx.fillStyle = "#f8f7ff";
       ctx.fillRect(0, canvas.height - footerHeight, canvas.width, footerHeight);
-      
+
       ctx.fillStyle = "#1e293b";
       ctx.font = "bold 34px 'Inter', sans-serif";
       ctx.fillText(`Amount: ₹${totalAmount.toFixed(2)}`, canvas.width / 2, canvas.height - 110);
-      
+
       ctx.fillStyle = "#64748b";
       ctx.font = "600 26px 'Inter', sans-serif";
       ctx.fillText(`UPI ID: ${UPI_ID}`, canvas.width / 2, canvas.height - 50);
@@ -585,13 +590,13 @@ export const PaymentPage = () => {
       const iconSize = 90;
       const logoX = (canvas.width / 2) - (iconSize / 2);
       const logoY = (headerHeight + 20 + (qrSize / 2)) - (iconSize / 2);
-      
+
       // White border for center logo
       ctx.fillStyle = "#ffffff";
       ctx.beginPath();
       ctx.roundRect(logoX - 8, logoY - 8, iconSize + 16, iconSize + 16, 16);
       ctx.fill();
-      
+
       ctx.drawImage(logo, logoX, logoY, iconSize, iconSize);
 
       // Download
@@ -653,7 +658,7 @@ export const PaymentPage = () => {
 
             {PAYMENT_METHODS.map((method, idx) => {
               const isCodDisabled = method.id === 'cod' && !dtdcAvailable;
-              
+
               return (
                 <div
                   key={method.id}
@@ -674,182 +679,182 @@ export const PaymentPage = () => {
                     }, 100);
                   }}
                 >
-                <div className="pp-method-header">
-                  {!isCodDisabled ? (
-                    <div className="pp-radio-outer">
-                      <div className="pp-radio-inner" />
-                    </div>
-                  ) : (
-                    <div className="pp-unavailable-indicator">
-                      <MdWarning size={18} color="#ef4444" />
-                    </div>
-                  )}
-                  <div className="pp-method-info">
-                    <div className="pp-method-name">
-                      {method.name}
-                      {method.badge && <span className="pp-badge">{method.badge}</span>}
-                    </div>
-                    <div className="pp-method-desc">{method.desc}</div>
-                    
-                    {method.id === 'cod' && !dtdcAvailable && (
-                      <div className="pp-availability-status unavailable" style={{
-                        fontSize: '10px',
-                        fontWeight: 700,
-                        marginTop: '6px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                        color: '#ef4444'
-                      }}>
-                        <MdWarning size={12} /> Online Payment Required for {deliveryAddress?.pincode}
+                  <div className="pp-method-header">
+                    {!isCodDisabled ? (
+                      <div className="pp-radio-outer">
+                        <div className="pp-radio-inner" />
+                      </div>
+                    ) : (
+                      <div className="pp-unavailable-indicator">
+                        <MdWarning size={18} color="#ef4444" />
                       </div>
                     )}
+                    <div className="pp-method-info">
+                      <div className="pp-method-name">
+                        {method.name}
+                        {method.badge && <span className="pp-badge">{method.badge}</span>}
+                      </div>
+                      <div className="pp-method-desc">{method.desc}</div>
 
-                    {method.codAmount && (
-                      <div className="pp-cod-label" style={{ color: selectedMethod === method.id ? "#ef4444" : "#7c3aed" }}>COD Fee: ₹{method.codAmount.toFixed(2)} applicable</div>
-                    )}
-                    {method.deliveryNote && (
-                      <div className="pp-cod-label" style={{ marginTop: "2px" }}>{method.deliveryNote}</div>
-                    )}
-                  </div>
-                  <div className="pp-method-icon">{method.icon}</div>
-                </div>
-
-                {isCodDisabled && (
-                  <div className="pp-cod-contact-section">
-                    <p className="pp-cod-contact-note">COD is limited for this pincode. Order via WhatsApp/Call</p>
-                    <div className="pp-contact-actions">
-                       <button className="pp-contact-btn whatsapp" onClick={(e) => {
-                         e.stopPropagation();
-                         const msg = `Hello, I want to place a COD order for Pincode: ${deliveryAddress?.pincode}. Order ID: ${cart_id}`;
-                         window.open(`https://wa.me/917090123709?text=${encodeURIComponent(msg)}`, '_blank');
-                       }}>
-                         <FiMessageCircle /> WhatsApp
-                       </button>
-                       <button className="pp-contact-btn call" onClick={(e) => {
-                         e.stopPropagation();
-                         window.location.href = 'tel:+917090123709';
-                       }}>
-                         <IoCall /> Call
-                       </button>
-                    </div>
-                  </div>
-                )}
-
-                {method.showApps && selectedMethod === method.id && (
-                  <div className="pp-upi-apps">
-                    <div className="pp-upi-app" title="Google Pay" onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedMethod('upi');
-                      setTimeout(() => {
-                        payButtonRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                      }, 100);
-                    }}>
-                      <img
-                        src="/gpay.png"
-                        alt="GPay"
-                      />
-                    </div>
-                    <div className="pp-upi-app" title="Paytm" onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedMethod('upi');
-                      setTimeout(() => {
-                        payButtonRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                      }, 100);
-                    }}>
-                      <img
-                        src="https://etimg.etb2bimg.com/photo/124571897.cms"
-                        alt="Paytm"
-                      />
-                    </div>
-                    <div className="pp-upi-app" title="PhonePe" onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedMethod('upi');
-                      setTimeout(() => {
-                        payButtonRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                      }, 100);
-                    }}>
-                      <img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo4x8kSTmPUq4PFzl4HNT0gObFuEhivHOFYg&s"
-                        alt="PhonePe"
-                      />
-                    </div>
-                    
-                    {!showMoreUPI ? (
-                      <span className="pp-upi-others" onClick={(e) => {
-                        e.stopPropagation();
-                        setShowMoreUPI(true);
-                      }}>+ Others</span>
-                    ) : (
-                      <>
-                        <div className="pp-upi-app" title="BHIM" onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedMethod('upi');
-                          setTimeout(() => {
-                            payButtonRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                          }, 100);
+                      {method.id === 'cod' && !dtdcAvailable && (
+                        <div className="pp-availability-status unavailable" style={{
+                          fontSize: '10px',
+                          fontWeight: 700,
+                          marginTop: '6px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          color: '#ef4444'
                         }}>
-                          <img
-                            src="https://www.presentations.gov.in/wp-content/uploads/2020/06/BHIM_Preview.png"
-                            alt="BHIM"
-                          />
+                          <MdWarning size={12} /> Online Payment Required for {deliveryAddress?.pincode}
                         </div>
-                      </>
-                    )}
-                  </div>
-                )}
+                      )}
 
-                {method.showQR && selectedMethod === method.id && (
-                  <div className="pp-qr-section" ref={scannerRef}>
-                    <div className="pp-qr-title">
-                      Scan QR Code to Pay<br/>Medingen Healthcare Private Limited
+                      {method.codAmount && (
+                        <div className="pp-cod-label" style={{ color: selectedMethod === method.id ? "#ef4444" : "#7c3aed" }}>COD Fee: ₹{method.codAmount.toFixed(2)} applicable</div>
+                      )}
+                      {method.deliveryNote && (
+                        <div className="pp-cod-label" style={{ marginTop: "2px" }}>{method.deliveryNote}</div>
+                      )}
                     </div>
-                    <div className="pp-qr-code-wrap">
-                       {(() => {
-                         const upiPayload = `upi://pay?pa=${UPI_ID}&pn=Medingen&am=${totalAmount.toFixed(2)}&cu=INR`;
-                         return (
-                           <img 
-                             src={`https://api.qrserver.com/v1/create-qr-code/?size=400x400&ecc=H&data=${encodeURIComponent(upiPayload)}`} 
-                             alt="UPI QR Scanner" 
-                             className="pp-qr-img" 
-                           />
-                         );
-                       })()}
-                       <div className="pp-qr-center-logo">
+                    <div className="pp-method-icon">{method.icon}</div>
+                  </div>
+
+                  {isCodDisabled && (
+                    <div className="pp-cod-contact-section">
+                      <p className="pp-cod-contact-note">COD is limited for this pincode. Order via WhatsApp/Call</p>
+                      <div className="pp-contact-actions">
+                        <button className="pp-contact-btn whatsapp" onClick={(e) => {
+                          e.stopPropagation();
+                          const msg = `Hello, I want to place a COD order for Pincode: ${deliveryAddress?.pincode}. Order ID: ${cart_id}`;
+                          window.open(`https://wa.me/917090123709?text=${encodeURIComponent(msg)}`, '_blank');
+                        }}>
+                          <FiMessageCircle /> WhatsApp
+                        </button>
+                        <button className="pp-contact-btn call" onClick={(e) => {
+                          e.stopPropagation();
+                          window.location.href = 'tel:+917090123709';
+                        }}>
+                          <IoCall /> Call
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {method.showApps && selectedMethod === method.id && (
+                    <div className="pp-upi-apps">
+                      <div className="pp-upi-app" title="Google Pay" onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedMethod('upi');
+                        setTimeout(() => {
+                          payButtonRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 100);
+                      }}>
+                        <img
+                          src="/gpay.png"
+                          alt="GPay"
+                        />
+                      </div>
+                      <div className="pp-upi-app" title="Paytm" onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedMethod('upi');
+                        setTimeout(() => {
+                          payButtonRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 100);
+                      }}>
+                        <img
+                          src="https://etimg.etb2bimg.com/photo/124571897.cms"
+                          alt="Paytm"
+                        />
+                      </div>
+                      <div className="pp-upi-app" title="PhonePe" onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedMethod('upi');
+                        setTimeout(() => {
+                          payButtonRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 100);
+                      }}>
+                        <img
+                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo4x8kSTmPUq4PFzl4HNT0gObFuEhivHOFYg&s"
+                          alt="PhonePe"
+                        />
+                      </div>
+
+                      {!showMoreUPI ? (
+                        <span className="pp-upi-others" onClick={(e) => {
+                          e.stopPropagation();
+                          setShowMoreUPI(true);
+                        }}>+ Others</span>
+                      ) : (
+                        <>
+                          <div className="pp-upi-app" title="BHIM" onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedMethod('upi');
+                            setTimeout(() => {
+                              payButtonRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }, 100);
+                          }}>
+                            <img
+                              src="https://www.presentations.gov.in/wp-content/uploads/2020/06/BHIM_Preview.png"
+                              alt="BHIM"
+                            />
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+
+                  {method.showQR && selectedMethod === method.id && (
+                    <div className="pp-qr-section" ref={scannerRef}>
+                      <div className="pp-qr-title">
+                        Scan QR Code to Pay<br />Medingen Healthcare Private Limited
+                      </div>
+                      <div className="pp-qr-code-wrap">
+                        {(() => {
+                          const upiPayload = `upi://pay?pa=${UPI_ID}&pn=Medingen&am=${totalAmount.toFixed(2)}&cu=INR`;
+                          return (
+                            <img
+                              src={`https://api.qrserver.com/v1/create-qr-code/?size=400x400&ecc=H&data=${encodeURIComponent(upiPayload)}`}
+                              alt="UPI QR Scanner"
+                              className="pp-qr-img"
+                            />
+                          );
+                        })()}
+                        <div className="pp-qr-center-logo">
                           <img src="/android-chrome-192x192.png" alt="M" />
-                       </div>
-                    </div>
+                        </div>
+                      </div>
 
-                    {/* Copy UPI ID */}
-                    <div className="pp-upi-id-row" onClick={handleCopyUPI}>
-                      <span className="pp-upi-id-label">UPI ID:</span>
-                      <strong className="pp-upi-id-value">{UPI_ID}</strong>
-                      <span className={`pp-copy-btn ${upiCopied ? 'copied' : ''}`}>
-                        {upiCopied ? <><FiCheck size={13} /> Copied!</> : <><FiCopy size={13} /> Copy</>}
-                      </span>
-                    </div>
+                      {/* Copy UPI ID */}
+                      <div className="pp-upi-id-row" onClick={handleCopyUPI}>
+                        <span className="pp-upi-id-label">UPI ID:</span>
+                        <strong className="pp-upi-id-value">{UPI_ID}</strong>
+                        <span className={`pp-copy-btn ${upiCopied ? 'copied' : ''}`}>
+                          {upiCopied ? <><FiCheck size={13} /> Copied!</> : <><FiCopy size={13} /> Copy</>}
+                        </span>
+                      </div>
 
-                    {/* Amount */}
-                    <div className="pp-upi-amount">
-                      Amount: <strong>₹{totalAmount.toFixed(2)}</strong>
-                    </div>
+                      {/* Amount */}
+                      <div className="pp-upi-amount">
+                        Amount: <strong>₹{totalAmount.toFixed(2)}</strong>
+                      </div>
 
-                    {/* Download Button */}
-                    <button 
-                      onClick={handleDownloadQR}
-                      className="pp-download-qr-btn"
-                    >
-                      <FiSmartphone size={16} /> Download Payment Card
-                    </button>
+                      {/* Download Button */}
+                      <button
+                        onClick={handleDownloadQR}
+                        className="pp-download-qr-btn"
+                      >
+                        <FiSmartphone size={16} /> Download Payment Card
+                      </button>
 
-                    <div className="pp-upi-whatsapp-hint">
-                      <FiMessageCircle size={16} /> After payment, click "Pay & Submit on WhatsApp" below!
+                      <div className="pp-upi-whatsapp-hint">
+                        <FiMessageCircle size={16} /> After payment, click "Pay & Submit on WhatsApp" below!
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                  )}
+                </div>
+              );
+            })}
 
             {/* ─── Delivery Address ─── */}
             <div
@@ -911,7 +916,7 @@ export const PaymentPage = () => {
             <div className="pp-order-summary-card pp-animate pp-animate-delay-2">
               <div className="pp-summary-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                 <h3 className="pp-summary-title" style={{ margin: 0 }}>Order Summary</h3>
-                <button 
+                <button
                   onClick={handleManualRefresh}
                   className="pp-refresh-btn"
                   disabled={isRefreshing}
@@ -1037,7 +1042,7 @@ export const PaymentPage = () => {
                       termsRef.current.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
                       termsRef.current.style.boxShadow = '0 0 0 3px #ef4444';
                       termsRef.current.style.borderRadius = '8px';
-                      
+
                       setTimeout(() => {
                         termsRef.current.style.backgroundColor = '';
                         termsRef.current.style.boxShadow = '';
@@ -1051,12 +1056,12 @@ export const PaymentPage = () => {
                 disabled={paying || isSyncingCOD || !deliveryAddress || !deliveryAddress.name}
               >
                 <MdLock size={17} />
-                {paying 
-                  ? "Processing..." 
-                  : isSyncingCOD 
-                    ? "Syncing Charges..." 
-                    : selectedMethod === 'upi_scanner' 
-                      ? `Pay ₹${totalAmount.toFixed(2)} & Submit on WhatsApp` 
+                {paying
+                  ? "Processing..."
+                  : isSyncingCOD
+                    ? "Syncing Charges..."
+                    : selectedMethod === 'upi_scanner'
+                      ? `Pay ₹${totalAmount.toFixed(2)} & Submit on WhatsApp`
                       : selectedMethod === 'cod'
                         ? `Place Order (COD) - ₹${totalAmount.toFixed(2)}`
                         : `Pay ₹${totalAmount.toFixed(2)} Securely`}
@@ -1064,7 +1069,7 @@ export const PaymentPage = () => {
 
               {/* ─── Cancel Order ─── */}
               <div style={{ display: "flex", justifyContent: "center", marginTop: "24px", marginBottom: "8px" }}>
-                <button 
+                <button
                   onClick={handleCancelOrder}
                   style={{ background: "none", border: "none", color: "#64748b", display: "flex", alignItems: "center", gap: "6px", fontSize: "15px", fontWeight: "600", cursor: "pointer", transition: "all 0.2s ease" }}
                   onMouseOver={(e) => e.target.style.color = "#ef4444"}
@@ -1114,22 +1119,22 @@ export const PaymentPage = () => {
           </div>
         </div>
 
-       
+
       </div>
-        <AddressSelectionModal
-          open={showAddressModal}
-          onClose={() => setShowAddressModal(false)}
-          cartId={cart_id}
-          onAddressSelected={async () => {
-            setShowAddressModal(false);
-            // Re-fetch cart data after address change
-            try {
-              const res = await getCartDataForID(cart_id);
-              if (res.status === 200) setCartData(res.data);
-            } catch (e) { console.error(e); }
-          }}
-        />
-        <Navigation />
+      <AddressSelectionModal
+        open={showAddressModal}
+        onClose={() => setShowAddressModal(false)}
+        cartId={cart_id}
+        onAddressSelected={async () => {
+          setShowAddressModal(false);
+          // Re-fetch cart data after address change
+          try {
+            const res = await getCartDataForID(cart_id);
+            if (res.status === 200) setCartData(res.data);
+          } catch (e) { console.error(e); }
+        }}
+      />
+      <Navigation />
     </>
   );
 };

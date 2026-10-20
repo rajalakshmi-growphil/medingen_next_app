@@ -66,23 +66,16 @@ export const sendNotification = async (heading, body) => {
   }
 };
 
-export const checkDTDCAvailability = async (pincode) => {
+export const checkDTDCAvailability = async (pincode: any) => {
   try {
-    const token = Cookies.get("jwt_token");
-
-    const res = await axios.get(
-      `${API_ENDPOINT}dtdc/check`,
-      {
-        params: { pincode },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const isBrowser = typeof window !== 'undefined';
+    const url = isBrowser ? '/api/dtdc/check' : `${API_ENDPOINT}dtdc/check`;
+    const res = await axios.get(url, {
+      params: { pincode },
+    });
 
     return res.data;
-  } catch (error) {
-    console.warn("Error checking DTDC availability:", error);
+  } catch (error: any) {
     return { dtdc_available: true };
   }
 };

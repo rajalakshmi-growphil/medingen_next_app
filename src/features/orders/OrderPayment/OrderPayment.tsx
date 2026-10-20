@@ -70,7 +70,7 @@ export const OrderPayment = () => {
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
     script.onload = () => {
       const options = {
-        key: "rzp_live_gD2p7TIiAYtioQ", // Replace with your Razorpay Key ID
+        key: "rzp_live_TormsyiU5Kc7iX", // Replace with your Razorpay Key ID
         amount: amount_due,
         currency: "INR",
         name: "Medingen",
@@ -128,7 +128,7 @@ export const OrderPayment = () => {
     document.body.appendChild(script);
   };
 
-  const completePayment = async () => {};
+  const completePayment = async () => { };
 
   const handlePay = async () => {
     Swal.showLoading();
@@ -179,9 +179,9 @@ export const OrderPayment = () => {
 
   return (
     <>
-    
+
       <div className="order-payment">
-      <Header title="Payment" />
+        <Header title="Payment" />
 
         <section className="order-confirmation">
           <p className="confirmation-message">Your Order is Confirmed!</p>
